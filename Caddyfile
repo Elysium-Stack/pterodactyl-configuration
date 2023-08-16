@@ -16,3 +16,10 @@ https://node.the-river-styx.com:443 {
     header_down -Access-Control-Allow-Origin
   }
 } 
+
+https://map.the-river-styx.com:443 { # 443 is for HTTPS
+  tls {$EMAIL} {
+    dns cloudflare {env.CF_API_TOKEN}
+  }
+  reverse_proxy bluemap-nginx:80
+}
