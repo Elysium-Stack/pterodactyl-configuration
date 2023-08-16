@@ -15,6 +15,7 @@ services:
             - ~/caddy/data:/data
         environment:
             EMAIL: $MAINTAINER_EMAIL # The email address to use for ACME registration.
+            CF_API_TOKEN: $CF_API_TOKEN
             LOG_FILE: '/data/access.log'
 
     pterodactyl-database:
