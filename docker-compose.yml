@@ -1,0 +1,97 @@
+caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: always
+    ports:
+        - 80:80
+        - 79:79
+        - 443:443
+    volumes:
+        - ./Caddyfile:/etc/caddy/Caddyfile:ro
+        - ~/caddy/config:/config
+        - ~/caddy/data:/data
+    environment:
+        EMAIL: $MAINTAINER_EMAIL # The email address to use for ACME registration.
+        LOG_FILE: '/data/access.log'
+
+pterodactyl-database:
+    image: mariadb:10.5
+    container_name: pterodactyl-database
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+        - ~/database:/var/lib/mysql
+    environment:
+        MYSQL_PASSWORD: $PT_DB_PW
+        MYSQL_ROOT_PASSWORD: $PT_DB_ROOT_PW
+        MYSQL_DATABASE: 'panel'
+        MYSQL_USER: 'pterodactyl'
+
+pterodactyl-cache:
+    image: redis:alpine
+    container_name: pterodactyl-cache
+    restart: always
+
+pterodactyl-panel:
+    container_name: pterodactyl-panel
+    image: ghcr.io/pterodactyl/panel:latest
+    restart: always
+    ports:
+        - '180:80' # i think i don't need this
+    links:
+        - pterodactyl-database
+        - pterodactyl-cache
+    volumes:
+        - ~/pterodactyl/var/:/app/var/
+        - ~/pterodactyl/nginx/:/etc/nginx/http.d/
+        - ~/pterodactyl/certs/:/etc/letsencrypt/
+        - ~/pterodactyl/logs/:/app/storage/logs
+    environment:
+        #panel environment
+        # This URL should be the URL that your reverse proxy routes to the panel server
+        APP_URL: $PANEL_URL
+        # A list of valid timezones can be found here: http://php.net/manual/en/timezones.php
+        APP_TIMEZONE: 'UTC'
+        APP_SERVICE_AUTHOR: $MAINTAINER_EMAIL
+        TRUSTED_PROXIES: 'caddy' # Set this to your proxy IP
+        # Uncomment the line below and set to a non-empty value if you want to use Let's Encrypt
+        # to generate an SSL certificate for the Panel.
+        # LE_EMAIL: "[email]"
+        DB_PASSWORD: $PT_DB_PW
+        APP_ENV: 'production'
+        APP_ENVIRONMENT_ONLY: 'false'
+        CACHE_DRIVER: 'redis'
+        SESSION_DRIVER: 'redis'
+        QUEUE_DRIVER: 'redis'
+        REDIS_HOST: 'pterodactyl-cache'
+        DB_HOST: 'pterodactyl-database'
+        DB_PORT: '3306'
+
+pterodactyl-wings:
+    image: ghcr.io/pterodactyl/wings:latest
+    container_name: pterodactyl-wings
+    restart: always
+    ports:
+        - '8081:8080' # do i even need these? i don't think so as i'm using caddy
+        - '2022:2022'
+        - '444:443'
+        - '8443:8443'
+    tty: true
+    environment:
+        TZ: 'UTC'
+        WINGS_UID: 988
+        WINGS_GID: 988
+        WINGS_USERNAME: pterodactyl
+    volumes:
+        - '/var/run/docker.sock:/var/run/docker.sock'
+        - '/var/lib/docker/containers/:/var/lib/docker/containers/'
+        - '/etc/pterodactyl/:/etc/pterodactyl/'
+        - '/var/lib/pterodactyl/:/var/lib/pterodactyl/'
+        - '/var/log/pterodactyl/:/var/log/pterodactyl/'
+        - '/tmp/pterodactyl/:/tmp/pterodactyl/'
+        - '/etc/ssl/certs:/etc/ssl/certs:ro'
+        # you may need /srv/daemon-data if you are upgrading from an old daemon
+        #- "/srv/daemon-data/:/srv/daemon-data/"
+        # Required for ssl if you use let's encrypt. uncomment to use.
+        #- "/etc/letsencrypt/:/etc/letsencrypt/"
+        # I don't need this, Caddy runs letsencrypt for me.

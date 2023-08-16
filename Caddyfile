@@ -1,0 +1,14 @@
+https://pt.the-river-styx.com:443 { # 443 is for HTTPS
+  tls {$EMAIL} # {$EMAIL} gets the environment variable which is set in docker
+  reverse_proxy pterodactyl-panel:80 # pterodactyl-panel is the docker container, this gets the port from inside the container (so i think i didn't have to publish any ports in docker-compose but idk lol)
+}
+
+https://panel.the-river-styx.com:443 {
+  tls {$EMAIL}
+  header {
+    Access-Control-Allow-Origin "*" # i had some CORS errors, I have no clue if this fixed it
+  }
+  reverse_proxy pterodactyl-wings:443 {
+    header_down -Access-Control-Allow-Origin
+  }
+} 
