@@ -108,6 +108,10 @@ services:
             # I don't need this, Caddy runs letsencrypt for me.
 
 networks:
+    default:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
     wings0:
         name: wings0
         driver: bridge
