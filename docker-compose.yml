@@ -112,6 +112,8 @@ networks:
         ipam:
             config:
                 - subnet: 172.20.0.0/16
+    web:
+        external: true
     wings0:
         name: wings0
         driver: bridge
