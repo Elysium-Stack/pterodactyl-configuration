@@ -10,6 +10,7 @@ services:
         networks:
             - default
             - wings0
+            - bluemap_internal
         ports:
             - 80:80
             - 79:79
