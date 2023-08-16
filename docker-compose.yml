@@ -7,6 +7,9 @@ services:
             dockerfile: Caddy.Dockerfile
         container_name: caddy
         restart: always
+        networks:
+            - default
+            - wings0
         ports:
             - 80:80
             - 79:79
