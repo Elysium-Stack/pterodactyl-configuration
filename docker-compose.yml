@@ -98,7 +98,7 @@ services:
             # Comment out the following line if host is not Ubuntu- or Debian-based distribution
             # - '/etc/ssl/certs:/etc/ssl/certs:ro'
             # Uncomment the following if host is RHEL/CentOS/Fedora/other EL
-            - "/etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt:/etc/ssl/certs/ca-certificates.crt:ro"
+            - '/etc/ssl/certs/ca-certificates.crt:/etc/pki/ca-trust/extracted/openssl/ca-bundle.trust.crt:ro'
             # you may need /srv/daemon-data if you are upgrading from an old daemon
             #- "/srv/daemon-data/:/srv/daemon-data/"
             # Required for ssl if you use let's encrypt. uncomment to use.
