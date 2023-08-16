@@ -77,6 +77,8 @@ services:
         image: ghcr.io/pterodactyl/wings:latest
         container_name: pterodactyl-wings
         restart: always
+        networks:
+            - wings0
         ports:
             - '8081:8080' # do i even need these? i don't think so as i'm using caddy
             - '2022:2022'
@@ -104,3 +106,13 @@ services:
             # Required for ssl if you use let's encrypt. uncomment to use.
             #- "/etc/letsencrypt/:/etc/letsencrypt/"
             # I don't need this, Caddy runs letsencrypt for me.
+
+networks:
+    wings0:
+        name: wings0
+        driver: bridge
+        ipam:
+            config:
+                - subnet: '172.21.0.0/16'
+        driver_opts:
+            com.docker.network.bridge.name: wings0
