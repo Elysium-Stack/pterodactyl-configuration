@@ -41,6 +41,8 @@ services:
         container_name: pterodactyl-servers-database
         restart: always
         command: --default-authentication-plugin=mysql_native_password
+        ports:
+            - '$SERVERS_DB_EXPOSED_PORT:3306'
         volumes:
             - ~/servers-database:/var/lib/mysql
         environment:
