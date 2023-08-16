@@ -3,7 +3,7 @@ version: '3'
 networks:
     web:
         external: true
-    internal:
+    caddy:
         external: false
         driver: bridge
 
@@ -16,7 +16,7 @@ services:
         restart: always
         networks:
             - web
-            - internal
+            - caddy
         ports:
             - 80:80
             - 79:79
