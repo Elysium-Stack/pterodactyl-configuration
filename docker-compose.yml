@@ -51,7 +51,7 @@ services:
             - ~/pterodactyl/var/:/app/var/
             - ~/pterodactyl/nginx/:/etc/nginx/http.d/
             - ~/pterodactyl/certs/:/etc/letsencrypt/
-            - ~/pterodactyl/logs/:/app/storage/logs
+            - ~/pterodactyl/logs/:/app/storage/logs/
         environment:
             #panel environment
             # This URL should be the URL that your reverse proxy routes to the panel server
