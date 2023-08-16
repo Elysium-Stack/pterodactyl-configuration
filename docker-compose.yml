@@ -38,11 +38,11 @@ services:
 
     pterodactyl-servers-database:
         image: mariadb:10.5
-        container_name: pterodactyl-database
+        container_name: pterodactyl-servers-database
         restart: always
         command: --default-authentication-plugin=mysql_native_password
         volumes:
-            - ~/database:/var/lib/mysql
+            - ~/servers-database:/var/lib/mysql
         environment:
             MYSQL_PASSWORD: $SERVERS_DB_PW
             MYSQL_ROOT_PASSWORD: $SERVERS_DB_ROOT_PW
