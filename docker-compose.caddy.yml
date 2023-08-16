@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+    web:
+        external: true
+    internal:
+        external: false
+        driver: bridge
+
+services:
+    caddy:
+        build:
+            context: .
+            dockerfile: Caddy.Dockerfile
+        container_name: caddy
+        restart: always
+        networks:
+            - web
+            - internal
+        ports:
+            - 80:80
+            - 79:79
+            - 443:443
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile:ro
+            - ~/caddy/config:/config
+            - ~/caddy/data:/data
+        environment:
+            EMAIL: $MAINTAINER_EMAIL # The email address to use for ACME registration.
+            CF_API_TOKEN: $CF_API_TOKEN
+            LOG_FILE: '/data/access.log'

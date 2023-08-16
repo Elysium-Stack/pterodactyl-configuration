@@ -1,29 +1,6 @@
 version: '3'
 
 services:
-    caddy:
-        build:
-            context: .
-            dockerfile: Caddy.Dockerfile
-        container_name: caddy
-        restart: always
-        networks:
-            - default
-            - wings0
-            - bluemap_internal
-        ports:
-            - 80:80
-            - 79:79
-            - 443:443
-        volumes:
-            - ./Caddyfile:/etc/caddy/Caddyfile:ro
-            - ~/caddy/config:/config
-            - ~/caddy/data:/data
-        environment:
-            EMAIL: $MAINTAINER_EMAIL # The email address to use for ACME registration.
-            CF_API_TOKEN: $CF_API_TOKEN
-            LOG_FILE: '/data/access.log'
-
     pterodactyl-database:
         image: mariadb:10.5
         container_name: pterodactyl-database
@@ -61,6 +38,9 @@ services:
         container_name: pterodactyl-panel
         image: ghcr.io/pterodactyl/panel:latest
         restart: always
+        networks:
+            - default
+            - web
         ports:
             - '180:80' # i think i don't need this
         links:
@@ -97,6 +77,7 @@ services:
         container_name: pterodactyl-wings
         restart: always
         networks:
+            - web
             - wings0
         ports:
             - '8081:8080' # do i even need these? i don't think so as i'm using caddy
