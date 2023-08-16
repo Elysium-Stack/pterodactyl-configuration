@@ -1,11 +1,11 @@
-https://pt.the-river-styx.com:443 { # 443 is for HTTPS
+https://panel.the-river-styx.com:443 { # 443 is for HTTPS
   tls {$EMAIL} {
     dns cloudflare {$CF_API_TOKEN}
   }
   reverse_proxy pterodactyl-panel:80 # pterodactyl-panel is the docker container, this gets the port from inside the container (so i think i didn't have to publish any ports in docker-compose but idk lol)
 }
 
-https://panel.the-river-styx.com:443 {
+https://node.the-river-styx.com:443 {
   tls {$EMAIL} {
     dns cloudflare {$CF_API_TOKEN}
   }
