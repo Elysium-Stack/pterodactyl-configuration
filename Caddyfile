@@ -9,7 +9,7 @@ https://docker.the-river-styx.com:443 { # 443 is for HTTPS
   tls {$EMAIL} {
     dns cloudflare {env.CF_API_TOKEN}
   }
-  reverse_proxy portainer:9443
+  reverse_proxy https://portainer:9443
 }
 
 https://node.the-river-styx.com:443 {
