@@ -44,3 +44,10 @@ https://muse-api.the-river-styx.com:443 { # 443 is for HTTPS
   }
   reverse_proxy muse-muse-1:3000
 }
+
+https://koto-api.the-river-styx.com:443 { # 443 is for HTTPS
+  tls {$EMAIL} {
+    dns cloudflare {env.CF_API_TOKEN}
+  }
+  reverse_proxy koto-koto-1:3000
+}
