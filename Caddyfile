@@ -51,3 +51,10 @@ https://koto-api.the-river-styx.com:443 { # 443 is for HTTPS
   }
   reverse_proxy koto-koto-1:3000
 }
+
+https://acsm.notaste.nl:443 { # 443 is for HTTPS
+  tls {$EMAIL} {
+    dns cloudflare {env.CF_API_TOKEN}
+  }
+  reverse_proxy acsm-acsm-1:8772
+}
