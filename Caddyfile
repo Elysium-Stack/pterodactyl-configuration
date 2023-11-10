@@ -58,3 +58,11 @@ https://acsm.notaste.nl:443 { # 443 is for HTTPS
   }
   reverse_proxy acsm-acsm-1:8772
 }
+
+
+https://api.bobb.app:443 { # 443 is for HTTPS
+  tls {$EMAIL} {
+    dns cloudflare {env.CF_API_TOKEN}
+  }
+  reverse_proxy bobb-api-1:3000
+}
